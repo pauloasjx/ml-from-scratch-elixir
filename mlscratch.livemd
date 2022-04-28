@@ -1,3 +1,5 @@
+<!-- vim: syntax=markdown -->
+
 # Machine Learning from Scratch
 
 ## Setup
