@@ -1,0 +1,62 @@
+# Machine Learning from Scratch
+
+## Setup
+
+## Iris Dataset
+
+```elixir
+defmodule IrisDataset do
+  def load do
+    File.read("iris.data")
+    |> elem(1)
+    |> String.split("\n")
+    |> Enum.map(fn line ->
+      [l | p] = String.split(line, ",") |> Enum.reverse()
+      points = p |> Enum.map(&String.to_float/1) |> Enum.reverse()
+
+      [
+        points,
+        if l === "Iris-setosa" do
+          0
+        else
+          1
+        end
+      ]
+    end)
+    |> Enum.reverse()
+    |> Enum.reduce(fn [ep | el], [pp, ll] -> [[ep | pp], [el | ll]] end)
+  end
+end
+```
+
+## KNN, K Nearest Neighbors
+
+```elixir
+defmodule KNN do
+  def euclidian_distance(s1, s2) do
+    List.zip([s1, s2])
+    |> Enum.map(fn {x1, x2} -> (x2 - x1) ** 2 end)
+    |> Enum.sum()
+    |> :math.sqrt()
+  end
+
+  def predict(dataset, x, k \\ 3) do
+    dataset
+    |> Enum.zip()
+    |> Enum.sort_by(fn {s, _} -> euclidian_distance(x, s) end)
+    |> Enum.take(k)
+    |> Enum.flat_map(&elem(&1, 1))
+    |> Enum.frequencies()
+    |> Enum.max_by(&elem(&1, 1))
+    |> elem(0)
+  end
+end
+
+dataset = IrisDataset.load()
+[points, _] = dataset
+test_point = Enum.at(points, 0)
+
+KNN.predict(dataset, test_point)
+```
+
+## Linear Regression
