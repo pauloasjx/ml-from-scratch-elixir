@@ -2,14 +2,12 @@
 
 # Machine Learning from Scratch
 
-## Setup
-
 ## Iris Dataset
 
 ```elixir
 defmodule IrisDataset do
   def load do
-    File.read("iris.data")
+    File.read("data/iris.data")
     |> elem(1)
     |> String.split("\n")
     |> Enum.map(fn line ->
@@ -61,4 +59,38 @@ test_point = Enum.at(points, 0)
 KNN.predict(dataset, test_point)
 ```
 
-## Linear Regression
+## Breast Cancer Dataset
+
+```elixir
+defmodule BreastCancerDataset do
+  def load do
+    File.read("data/wdbc.data")
+    |> elem(1)
+    |> String.split("\n", trim: true)
+    |> Enum.map(fn line ->
+      [_ | t] = String.split(line, ",")
+      [l | p] = t
+      points = p |> Enum.map(&(Float.parse(&1) |> elem(0)))
+
+      [
+        points,
+        if l === "B" do
+          0
+        else
+          1
+        end
+      ]
+    end)
+    |> Enum.reduce(fn [ep | el], [pp, ll] -> [[ep | pp], [el | ll]] end)
+  end
+end
+```
+
+## Logistic Regression
+
+```elixir
+defmodule LogisticRegression do
+  def fit() do
+  end
+end
+```
